@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus | Repertório Digital</title>
+
+    <link rel="shortcut icon" type="image/jpeg" href="logo-nexus.jpg">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #a855f7;
+            --primary-light: #d946ef;
+            --bg: #020617;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(168, 85, 247, 0.2);
+            --text-main: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(168, 85, 247, 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 90% 90%, rgba(217, 70, 239, 0.1) 0%, transparent 30%);
+            color: var(--text-main);
+            margin: 0; padding: 0; min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* --- TELA INICIAL PREMIUM (SPLASH) --- */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #020617;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999; transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-container {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            padding: 60px 40px; border-radius: 40px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center; max-width: 500px; width: 85%;
+            animation: slideUp 1s ease-out;
+        }
+
+        .premium-badge {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid var(--glass-border);
+            color: #d8b4fe; padding: 6px 16px; border-radius: 50px;
+            font-size: 0.7rem; font-weight: 800; letter-spacing: 3px;
+            display: inline-block; margin-bottom: 30px; text-transform: uppercase;
+        }
+
+        .main-title {
+            margin: 10px 0; font-size: 2.4rem; font-weight: 900;
+            background: linear-gradient(135deg, #fff 30%, var(--primary) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .divider-glow {
+            width: 100px; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 25px auto; box-shadow: 0 0 15px var(--primary);
+        }
+
+        .btn-premium {
+            background: #fff; color: #0f172a; border: none;
+            padding: 20px 45px; border-radius: 20px;
+            font-weight: 800; cursor: pointer; letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .btn-premium:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(168, 85, 247, 0.4); }
+
+        /* --- CONTEÚDO PRINCIPAL (REPERTÓRIO) --- */
+        header {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 40px 20px; border-bottom: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .brand-section h1 {
+            margin: 0; font-size: 2.2rem; font-weight: 900;
+            background: linear-gradient(90deg, #fff, var(--primary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .info-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+
+        .info-pill {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid var(--glass-border);
+            padding: 10px 20px; border-radius: 50px;
+            font-size: 0.75rem; font-weight: 700; color: #d8b4fe;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+
+        .info-pill.alert { border-color: #f87171; color: #f87171; background: rgba(248, 113, 113, 0.05); }
+
+        .container { width: 92%; max-width: 1200px; margin: 40px auto; }
+        .repertorio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+
+        .card {
+            background: var(--card-glass);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 30px; border-radius: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer; position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(168, 85, 247, 0.08);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card.done { opacity: 0.2; filter: grayscale(1); transform: scale(0.95); }
+
+        .musica-num { color: var(--primary); font-weight: 900; font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase; }
+        .cantor-nome { color: #f87171; font-weight: 700; font-size: 0.8rem; margin: 5px 0; display: block; text-transform: uppercase; }
+        .musica-titulo { font-size: 1.25rem; font-weight: 800; color: #fff; margin: 10px 0 20px; min-height: 2.6em; }
+
+        .tom-badge {
+            background: rgba(168, 85, 247, 0.15);
+            color: #d8b4fe; padding: 6px 15px; border-radius: 12px;
+            font-weight: 800; font-size: 0.8rem; border: 1px solid var(--glass-border);
+        }
+
+        .btn-mini {
+            background: linear-gradient(90deg, #6b21a8, var(--primary));
+            color: white; padding: 14px; border-radius: 18px;
+            font-size: 0.85rem; text-align: center; font-weight: 800;
+            margin-top: 20px; transition: 0.3s;
+        }
+
+        /* --- MODAL "STAGE READY" - SCROLL LATERAL --- */
+        .modal {
+            display: none; position: fixed; z-index: 9999;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: #ffffff;
+        }
+
+        .modal-content {
+            padding: 20px 40px;
+            height: 100vh;
+            width: 100vw;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        .cifra-wrapper {
+            flex: 1;
+            overflow-x: auto; /* ATIVA SCROLL LATERAL */
+            overflow-y: hidden; /* TRAVA SCROLL VERTICAL */
+            margin-top: 15px;
+            padding-bottom: 20px;
+            display: block;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) #f1f5f9;
+        }
+
+        .cifra-wrapper::-webkit-scrollbar { height: 8px; }
+        .cifra-wrapper::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        .cifra-wrapper::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        .close-btn {
+            position: fixed; top: 20px; right: 20px;
+            font-size: 35px; cursor: pointer;
+            background: #f1f5f9;
+            width: 60px; height: 60px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; color: #000; border: 1px solid #ddd;
+            z-index: 10001;
+        }
+
+        #modalTitulo {
+            font-size: 1.8rem; font-weight: 900; margin-bottom: 20px;
+            color: #020617;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 10px;
+        }
+
+        .cifra-container {
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre;
+            font-size: 1.2rem;
+            color: #000000;
+            font-weight: 700;
+            line-height: 1.5;
+            column-width: 450px; /* LARGURA DA PÁGINA */
+            column-gap: 60px;
+            height: 80vh;
+            column-fill: auto;
+            display: block;
+        }
+
+        .cifra-container strong {
+            color: var(--primary);
+            text-shadow: none;
+        }
+
+        .highlight-link {
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .highlight-link:hover {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.2);
+            filter: brightness(1.2);
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 800px) {
+            .cifra-container {
+                column-width: 100vw;
+                column-gap: 20px;
+            }
+            .modal-content { padding: 15px; }
+            .repertorio-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+
+<div id="splash-screen">
+    <div class="glass-container">
+        <div class="premium-badge">PERFECT WORSHIP </div>
+
+        <div class="welcome-text">
+            <p style="color: #94a3b8; margin: 0; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;">Seja bem-vindo ao</p>
+            <h2 class="main-title" style="font-size: 2.8rem; margin: 5px 0;">CHURCH PRAISE</h2>
+        </div>
+
+        <div class="divider-glow"></div>
+
+        <div style="margin-bottom: 35px;">
+            <p style="color: #64748b; font-size: 0.9rem; line-height: 1.6; margin: 0; padding: 0 15px;">
+                Solução de alta performance Desenvolvido por <br>
+                <span style="color: #fff; font-weight: 800; font-size: 1.1rem; letter-spacing: 0.5px;">John Álex</span>
+            </p>
+            <p style="color: #a855f7; font-size: 0.75rem; font-weight: 700; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                Exclusivo Para IBM ADORAÇÃO TIBIRI
+            </p>
+        </div>
+
+        <button class="btn-premium" onclick="fecharSplash()" style="width: 100%; max-width: 280px; box-shadow: 0 15px 30px rgba(168, 85, 247, 0.2);">
+            INICIAR EXPERIÊNCIA
+        </button>
+
+        <div style="border-top: 1px solid rgba(168, 85, 247, 0.1); padding-top: 25px; margin-top: 20px;">
+
+            <a href="https://www.instagram.com/NEXUS.TECNOLOGIAERP" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 10px; color: #d8b4fe; font-size: 0.8rem; font-weight: 700; transition: 0.3s; padding: 10px 22px; border-radius: 50px; background: rgba(168, 85, 247, 0.05); border: 1px solid rgba(168, 85, 247, 0.15); margin-bottom: 20px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+                <span>@NEXUS.TECNOLOGIAERP</span>
+            </a>
+
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <p style="font-size: 0.6rem; font-weight: 900; color: #a855f7; letter-spacing: 3px; text-transform: uppercase; margin: 0; opacity: 0.8;">
+                    © 2026 NEXUS TECNOLOGIA
+                </p>
+                <p style="font-size: 0.5rem; color: #475569; letter-spacing: 2px; font-weight: 700;">
+                    VERSION 1.5 • 2026.04
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<header>
+    <div class="header-container">
+        <div class="brand-section">
+            <h1>Powered by Nexus Tecnologia</h1>
+        </div>
+        <div class="info-grid">
+            <a href="https://www.instagram.com/louvor_ibmtibiri" target="_blank" class="info-pill highlight-link">
+                <span>👥</span> GRUPO A • IBM ADORAÇÃO TIBIRI
+            </a>
+            <a href="https://www.instagram.com/ibmtibiri" target="_blank" class="info-pill highlight-link">
+                <span>🍷</span> CULTO DE SANTA CEIA
+            </a>
+            <div class="info-pill alert" id="timer"><span>⚠️ CHECK-OUT:</span> --h --m --s</div>
+        </div>
+    </div>
+</header>
+
+<div style="margin-bottom: 30px; display: flex; justify-content: center;">
+    <div style="position: relative; width: 100%; max-width: 600px;">
+        <span style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #a855f7; opacity: 0.7;">🔍</span>
+        <input type="text" id="searchInput" onkeyup="filtrarRepertorio()" placeholder="Pesquisar música, cantor ou tonalidade"
+               style="width: 100%; padding: 18px 20px 18px 50px; border-radius: 20px; border: 1px solid rgba(168, 85, 247, 0.2); background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); color: white; font-family: 'Inter', sans-serif; font-size: 1rem; outline: none; transition: 0.3s; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+    </div>
+</div>
+
+<div class="container">
+    <div class="repertorio-grid" id="musicGrid">
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">01 | Periodo de louvor</span><span class="cantor-nome">MILENA DELMIRO</span><h2 class="musica-titulo">Único + Que Ele Cresça</h2><span class="tom-badge">TOM: B</span></div><div class="btn-mini" onclick="abrirCifra('Único + Que Ele Cresça', cifraH1); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">02 | Periodo de louvor</span><span class="cantor-nome">LAYS LIMA</span><h2 class="musica-titulo">Adorarei</h2><span class="tom-badge">TOM: C#m</span></div><div class="btn-mini" onclick="abrirCifra('Adorarei', cifraH2); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">03 | Periodo de louvor</span><span class="cantor-nome">MILENA CÁSSIA</span><h2 class="musica-titulo">Sei é Bem Assim</h2><span class="tom-badge">TOM: E</span></div><div class="btn-mini" onclick="abrirCifra('Sei é Bem Assim', cifraH3); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">04 | Periodo de louvor</span><span class="cantor-nome">TIAGO SOARES</span><h2 class="musica-titulo">Deus me Ama</h2><span class="tom-badge">TOM: A</span></div><div class="btn-mini" onclick="abrirCifra('Deus me Ama', cifraH4); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">05 | Periodo de louvor</span><span class="cantor-nome">MILENA CÁSSIA</span><h2 class="musica-titulo">Bem Mais Que Tudo</h2><span class="tom-badge">TOM: E</span></div><div class="btn-mini" onclick="abrirCifra('Bem Mais Que Tudo', cifraH5); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">06 | Periodo de louvor</span><span class="cantor-nome">MILENA DELMIRO</span><h2 class="musica-titulo">Me Ama</h2><span class="tom-badge">TOM: G</span></div><div class="btn-mini" onclick="abrirCifra('Me Ama', cifraH6); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">07 | IBM Oferta</span><span class="cantor-nome">LAYS LIMA</span><h2 class="musica-titulo">Vitorioso És</h2><span class="tom-badge">TOM: A</span></div><div class="btn-mini" onclick="abrirCifra('Vitorioso És', cifraH7); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">08 | Pós Palavra</span><span class="cantor-nome">MILENA DELMIRO</span><h2 class="musica-titulo">Que Amor é Esse</h2><span class="tom-badge">TOM: G</span></div><div class="btn-mini" onclick="abrirCifra('Que Amor é Esse', cifraH8); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">09 | Apelo</span><span class="cantor-nome">MILENA DELMIRO</span><h2 class="musica-titulo">Me Ama</h2><span class="tom-badge">TOM: G</span></div><div class="btn-mini" onclick="abrirCifra('Me Ama (Apelo)', cifraH6); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">10 | Org. Ceia</span><span class="cantor-nome">LAYS LIMA</span><h2 class="musica-titulo">Digno é o Senhor</h2><span class="tom-badge">TOM: G</span></div><div class="btn-mini" onclick="abrirCifra('Digno é o Senhor', cifraH10); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">11 | Servir</span><span class="cantor-nome">TIAGO SOARES</span><h2 class="musica-titulo">O Amigo</h2><span class="tom-badge">TOM: A</span></div><div class="btn-mini" onclick="abrirCifra('O Amigo', cifraH11); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">12 | Servir</span><span class="cantor-nome">TIAGO SOARES</span><h2 class="musica-titulo">O Lamento de Israel</h2><span class="tom-badge">TOM: Em</span></div><div class="btn-mini" onclick="abrirCifra('O Lamento de Israel', cifraH12); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">13 | Final</span><span class="cantor-nome">MILENA CÁSSIA</span><h2 class="musica-titulo">OH Quão Lindo Esse Nome É</h2><span class="tom-badge">TOM: C</span></div><div class="btn-mini" onclick="abrirCifra('OH Quão Lindo Esse Nome É', cifraH13); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">14 | *EXTRA*</span><span class="cantor-nome">MILENA DELMIRO</span><h2 class="musica-titulo">Alfa e omega</h2><span class="tom-badge">TOM: E</span></div><div class="btn-mini" onclick="abrirCifra('ALFA E OMEGA', cifraH14); event.stopPropagation()">📄 Ver Cifra</div></div>
+    </div>
+</div>
+
+<div id="cifraModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="fecharCifra()">&times;</span>
+
+        <div style="border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
+            <h2 id="modalTitulo" style="color: #020617; margin: 0;"></h2>
+        </div>
+
+        <div class="cifra-wrapper">
+            <pre id="modalCifra" class="cifra-container"></pre>
+        </div>
+    </div>
+</div>
+
+<script>
+    const cifraH1 = `Tom: B
+[Intro] B  E7M  F#  G#m7  B
+
+[Primeira Parte]
+
+E7M                        F#
+Veja, a vida está tão perto
+G#m7                            B
+Prove, a paz não está tão longe
+E7M                             F#
+Cadê as sombras que nos seguiam?
+G#m7                              B
+Quebrou o cristal do nosso orgulho
+E7M       F#     G#m7
+Ao chão, ao chão
+
+E7M                        F#
+Veja, a vida está tão perto
+G#m7                            B
+Prove, a paz não está tão longe
+E7M                             F#
+Cadê as sombras que nos seguiam?
+G#m7                              B
+Quebrou o cristal do nosso orgulho
+
+E                   F#
+Veja os tronos de outros reis
+G#m                    B
+Dobrados ao chão, até meu coração se deu
+E            F#
+Eita, tudo se rendeu
+G#m                  B
+Quem não louvará? Quem não temerá o Rei?
+
+ E          F#
+Veja os tronos de outros reis
+G#m          B
+Dobrados ao chão, até meu coração se deu
+E           F#
+Eita, tudo se rendeu
+G#m                 B
+Quem não louvará? Quem não temerá o Rei?
+
+E                  F#
+  Importa que Ele cresça
+G#m                B
+    Maior que toda sombra que a
+           E
+Gente projetou
+                  F#
+Importa que Ele seja
+   G#m
+o único
+
+ B
+Senhor
+E                  F#
+  Importa que Ele cresça
+G#m                B
+    Maior que toda sombra que a
+           E
+Gente projetou
+                  F#
+Importa que Ele seja
+ G#m
+o único
+ B
+Senhor
+
+ E          F#
+Veja os tronos de outros reis
+G#m          B
+Dobrados ao chão, até meu coração se deu
+E           F#
+Eita, tudo se rendeu
+G#m                 B
+Quem não louvará? Quem não temerá o Rei?
+
+ E          F#
+Veja os tronos de outros reis
+G#m          B
+Dobrados ao chão, até meu coração se deu
+E           F#
+Eita, tudo se rendeu
+G#m                 B
+Quem não louvará? Quem não temerá o Rei?
+
+ E          F#
+Veja os tronos de outros reis
+G#m          B
+Dobrados ao chão, até meu coração se deu
+E           F#
+Eita, tudo se rendeu
+G#m                 B
+Quem não louvará? Quem não temerá o Rei?
+
+ C#m
+Que Ele cresça
+      E
+E eu diminua
+      F#m . G#m
+Que Ele apareça
+             D#m
+E eu me constranja
+C#m
+Com a Sua glória
+         E
+E todo o seu amor
+          G#m
+Infinita humildade
+           F#
+Servo de todos os irmãos
+
+ C#m
+Que Ele cresça
+   D#m     E
+E eu diminua
+         F#m   G#m
+Que Ele apareça
+             D#m
+E eu me constranja
+C#m
+Com a Sua glória
+        D#m   . E
+E todo o seu amor
+          G#m
+Infinita humildade
+            F#
+Servo de todos os irmãos
+
+ C#m
+Que Ele cresça
+      E
+E eu diminua
+      G#m
+Que Ele apareça
+             D#m
+E eu me constranja
+C#m
+Com a Sua glória
+         E
+E todo o seu amor
+          G#m
+Infinita humildade
+      F#
+Servo de todos os irmãos
+
+C#m
+Que Ele cresça
+   D#m     E
+E eu diminua
+         F#m   G#m
+Que Ele apareça
+             D#m
+E eu me constranja
+C#m
+Com a Sua glória
+        D#m   . E
+E todo o seu amor
+          G#m
+Infinita humildade
+            F#           C#m
+Servo de todos os irmãos`;
+
+    const cifraH2 = `Tom: C#m
+[Intro] E  A  E  B
+        C#m B  Cm7(5-)
+
+[Primeira Parte]
+
+C#m                      A
+   Por tua morte lá na cruz
+               E
+Jesus te adorarei
+                  B
+Pelo sangue derramado
+                     A
+Pelo véu que foi rasgado
+         E  B/D#
+Te adorarei
+
+C#m                           A
+   Pelo privilégio de aqui estar
+                                  E
+Poder soltar a minha voz e te louvar
+                     B
+Por sentir a tua presença
+                               A
+Pela total certeza de tua existência
+         E ( E  B/D# )
+Te adorarei
+
+C#m                                      A
+   Por teu santo espirito que habita em mim
+                                 E
+Por teu grande amor que não tem fim
+     B      Cm7(5-)
+Te adorarei
+C#m                               A
+   Por me inspirar na letra da canção
+                                E
+Por cantar agora e senti sua unção
+     B
+Te adorarei
+
+[Refrão]
+
+            E
+Te adorarei
+                             B
+Senhor mais uma vez te adorarei
+                                     F#m
+Fui chamada pra adorar então adorarei
+
+Sou adorador foi assim que
+         C#m             B
+Deus me fez então adorarei
+
+  A/C#   E
+Adorarei
+                             B
+Senhor mais uma vez te adorarei
+                                     F#m
+Fui chamada pra adorar então adorarei
+
+Sou adorador foi assim que
+         C#m             B
+Deus me fez então adorarei
+
+[Ponte]
+
+C#m                              A
+   Ninguém vai me calar te adorarei
+                         E
+Está em meu DNA te adorarei
+                         B
+Ainda que tirarem minha vida
+                                 C#m
+Quando chegar ai no céu te adorarei
+
+                              A
+Ninguém vai me calar te adorarei
+                         E
+Está em meu DNA te adorarei
+                         B
+Ainda que tirarem minha vida
+
+Quando chegar ai no céu te adorarei
+
+C#m            A
+   Te adorarei   te adorarei
+E                      B
+  Quando chegar ai no céu te adorarei
+C#m            A
+   Te adorarei   te adorarei
+E                      B
+  Quando chegar ai no céu te adorarei
+
+( C#m A  E  B )
+( C#m A  E  B )
+
+[Primeira Parte]
+
+C#m                                      A
+   Por teu santo espirito que habita em mim
+                                  E
+Pelo teu grande amor que não tem fim
+     B
+Te adorarei
+C#m                               A
+   Por me inspirar na letra da canção
+                               E
+Por tocar agora e senti sua unção
+     B
+Te adorarei
+
+[Refrão]
+
+            E
+Te adorarei
+                             B
+Senhor mais uma vez te adorarei
+                                     F#m
+Fui chamada pra adorar então adorarei
+
+Sou adorador foi assim que
+         C#m             B
+Deus me fez então adorarei
+
+  A/C#   E
+Adorarei
+                             B
+Senhor mais uma vez te adorarei
+                                     F#m
+Fui chamada pra adorar então adorarei
+
+Sou adorador foi assim que
+         C#m             B
+Deus me fez então adorarei
+
+[Ponte]
+
+C#m                              A
+   Ninguém vai me calar te adorarei
+                         E
+Está em meu DNA te adorarei
+                         B
+Ainda que tirarem minha vida
+                                 C#m
+Quando chegar ai no céu te adorarei
+
+                              A
+Ninguém vai me calar te adorarei
+                         E
+Está em meu DNA te adorarei
+                         B
+Ainda que tirarem minha vida
+                                  C#m
+Quando chegar ai no céu te adorarei
+
+C#m            A
+   Te adorarei   te adorarei
+E                      B
+  Quando chegar ai no céu te adorarei
+C#m            A
+   Te adorarei   te adorarei
+E                      B
+  Quando chegar ai no céu te adorarei
+
+C#m            A
+   Te adorarei   te adorarei
+E                      B
+  Quando chegar ai no céu te adorarei
+C#m            A
+   Te adorarei   te adorarei
+E                      B           C#m
+  Quando chegar ai no céu te adorarei`;
+
+    const cifraH3 = `Tom: E
+[Intro] E  A  F#m B
+
+E              B/D#
+Sei é bem assim
+       C#m
+O medo chega e aflição
+           A
+Destrói as bases que
+   F#m           B
+Sustentam o coração
+E            B/D#
+Sei é bem assim
+        C#m
+É tão difícil suportar
+          A
+O medo, a dor e essa
+ F#m          B
+Lágrima no olhar
+           E           B/D#
+Não sabes mais o que fazer
+          C#m
+Nem mesmo para onde ir
+      A
+A única certeza
+  F#m            B
+É que chegou ao fim
+                E
+Mas se Deus mudou a minha vida
+              B/D#            C#m
+Também vai mudar a tua história
+                  A        F#m
+Deus não deu seu único filho
+                   B
+Pra morrer por nós em vão outrora
+              E
+Derramou seu sangue carmesim
+    B/D#               C#m
+Por você e também por mim
+             A         F#m
+Você não nasceu para sofrer
+              B
+Hoje Deus vai te fazer feliz
+               E
+Vai te arrancar do fundo do poço
+        B/D#             C#m
+Te reerguer, te fazer um vaso novo
+                   A              F#m
+Vai mostrar pra todos teus inimigos
+             B
+Que ele sempre esteve contigo
+                E
+E eles irão olhar e vão dizer
+    B/D#                   C#m
+Como é que isso pode acontecer
+             A         F#m
+Ele estava caído, derrotado
+             B  B7
+Hoje esta de pé, fortificado
+                E
+E você vai cantar do outro lado
+              B/D#             C#m
+E você vai cantar do outro lado
+               A              F#m
+E você vai cantar do outro lado
+             B
+O hino da vitória
+              E
+Só o Senhor é Deus
+               C#m
+Só Deus é o Senhor
+               A
+Se ele te prometeu
+             F#m                  B
+Se considere muito mais que vencedor
+                A  B
+Você é um vencedor
+                E
+Você é um vencedor`;
+
+    const cifraH4 = `Tom: A
+[Intro] A9  G7M(6)
+        A9  G7M(6)
+
+[Primeira Parte]
+
+ A9
+Mesmo sendo assim pobre e pecador
+     D9
+Deus    me ama
+ A9
+Mesmo sendo falho, mesmo sem merecer
+     D9
+Deus    me ama
+ A9
+Se eu estou forte, se eu estou de pé
+     D9
+Deus    me ama
+ A9
+Se eu estou fraco, se eu estou caído
+         D9
+Ele não deixa de me amar
+
+[Pré-Refrão]
+
+ A9
+Sem o seu amor, sem o seu perdão
+         D9
+O que seria de mim
+ A9
+Deus me amou tanto que entregou seu filho
+        D9
+Pra morrer em meu lugar
+
+[Refrão]
+
+ A9
+Deus me ama
+        D9
+O seu amor é tão grande, incondicional
+ A9
+Deus me ama
+            D9
+E ele esta sempre de braços abertos pra mim
+
+( A9  G7M(6) )
+
+[Primeira Parte]
+
+ A9
+Mesmo sendo assim pobre e pecador
+     D9
+Deus    me ama
+ A9
+Mesmo sendo falho, mesmo sem merecer
+     D9
+Deus    me ama
+ A9
+Se eu estou forte, se eu estou de pé
+     D9
+Deus    me ama
+ A9
+Se eu estou fraco, se eu estou caído
+         D9
+Ele não deixa de me amar
+
+[Pré-Refrão]
+
+ A9
+Sem o seu amor, sem o seu perdão
+         D9
+O que seria de mim
+ A9
+Deus me amou tanto que entregou seu filho
+        D9
+Pra morrer em meu lugar
+
+[Refrão]
+
+ A9
+Deus me ama
+        D9
+O seu amor é tão grande, incondicional
+ A9
+Deus me ama
+            D9
+E ele esta sempre de braços abertos pra mim`;
+
+    const cifraH5 = `Tom: E
+[Letra e Acordes]
+
+                  A       B     E
+Bem mais que as forças, poder e reis
+            A     B           E
+Que a natureza e tudo que se fez
+          C#m         B         A     E
+Bem mais que tudo, criado por tuas mãos
+  F#m                    B
+Deus tu és início, meio e fim
+
+                  A         B          E
+Bem mais que os mares, bem mais que o sol
+          A             B         E
+E as maravilhas que o mundo conheceu
+      C#m       B          A   E
+As riquezas, tesouro dessa terra
+ F#m                B
+Incomparável és pra mim
+
+E    F#m       B         E
+Por amor, sua vida entregou
+E    F#m       B      E
+Meu senhor humilhado foi
+        C#m      B     A     E
+Como a flor machucada no jardim
+         F#m          A  B     E
+Morreu por mim  pensou em mim me amou
+
+  E    F#m       B          E
+Por amor, sua vida entregou
+E    F#m       B      E
+Meu senhor humilhado foi
+        C#m      B           A
+Como a flor machucada no jardim
+         F#m   B           E
+Morreu por mim pensou em mim me amou
+
+        C#m      B         A   E
+Como a flor machucada no jardim
+         F#m   B           E
+Morreu por mim pensou em mim me amou`;
+
+    const cifraH6 = `Tom: G
+[Intro] G  C/E  D  C2
+
+[Dedilhado - Intro e Primeira Parte]
+
+Parte 8 de 8
+
+[Primeira Parte]
+
+ G
+Tem ciúmes de mim
+C/E
+O Seu amor é como um furacão
+  D
+E eu me rendo
+                       C2
+Ao vento de Sua misericórdia
+   G
+Então, de repente
+                          C/E
+Não vejo mais minhas aflições
+
+Eu só vejo á glória
+      D
+E percebo quão maravilhoso Ele é
+     C2
+E o tanto que Ele me quer
+
+[Refrão]
+
+G           C/E
+Ô, Ele me amou
+          D
+Ô, Ele me ama
+         C2
+Ele me amou
+
+[Tab - Solo 1]
+
+( G  C/E  D  C2 )
+
+[Primeira Parte]
+
+ G
+Tem ciúmes de mim
+C/E
+O Seu amor é como um furacão
+  D
+E eu me rendo
+                       C2
+Ao vento de Sua misericórdia
+   G
+Então, de repente
+                          C/E
+Não vejo mais minhas aflições
+
+Eu só vejo a glória
+      D
+E percebo quão maravilhoso Ele é
+     C2
+E o tanto que Ele me quer
+
+[Refrão]
+
+G           C/E
+Ô, Ele me amou
+          D
+Ô, Ele me ama
+         C2
+Ele me amou
+
+[Solo 2]
+
+[Tab - Solo 2]
+
+( G  C/E  D  C2 )
+
+   G           C/E
+Me ama, Ele me ama
+       D           C2
+Ele me ama, Ele me ama
+   G           C/E
+Me ama, Ele me ama
+       D           C2
+Ele me ama, Ele me ama
+
+[Segunda Parte]
+
+ G
+Somos sua herança
+
+E Ele é o nosso galardão
+ C/E
+Seu olhar de graça
+
+Nos atrai à redenção
+       D
+Se a graça é um oceano
+            C2
+Estamos afogando
+
+   G
+O céu se une à terra
+
+Como um beijo apaixonado
+     C/E
+Meu coração dispara
+
+Em meu peito, acelerado
+     D
+Não tenho tempo pra perder
+
+Com ressentimentos
+        C2
+Quando penso que Ele
+
+[Refrão Final]
+
+   G           C/E
+Me ama, Ele me ama
+       D           C2
+Ele me ama, Ele me ama
+   G           C/E
+Me ama, Ele me ama
+       D           C2
+Ele me ama, Ele me ama
+
+( G  C/E  D  C2 )
+( G  C/E  D  C2 )
+
+   G           C/E
+Me ama, Ele me ama
+       D           C2
+Ele me ama, Ele me ama
+   G           C/E
+Me ama, Ele me ama
+       D           C2
+Ele me ama, Ele me ama
+
+( G  C/E  D  C2 )
+( G  C/E  D  C2 )
+
+G            C/E
+Oh, Ele me amou
+           D             C2
+Oh, Ele me ama, Ele me amou
+G            C/E
+Oh, Ele me amou
+           D
+Oh, Ele me ama
+         C2
+Ele me amou`;
+
+    const cifraH7 = `Tom: A
+[Intro] A
+
+  A
+Lutamos com armas de fé
+ F#m
+E nada irá resistir
+            D
+Enquanto adoramos
+    F#m                E/G#
+Em meio às tribulações
+   A
+O nosso Deus é vencedor
+         D      Bm
+Nós o adoramos
+
+F#m           D
+    Vitorioso és
+               A
+Na tempestade estás
+     E           F#m
+Teu nome infalível é
+                 D
+Os reinos vêm e vão
+                  A
+Teu trono acima está
+     E            D
+Teu nome imutável é
+
+    A
+O inferno não prevaleceu
+ F#m
+E nada irá me impedir
+         D
+Eu te adorarei
+ F#m                  E/G#
+Muralhas vão estremecer
+  A
+Cadeias irão se romper
+            D   Bm
+Enquanto adoramos
+
+F#m           D
+    Vitorioso és
+               A
+Na tempestade estás
+     E           F#m
+Teu nome infalível é
+                 D
+Os reinos vêm e vão
+                 A
+Teu trono acima está
+     E            D
+Teu nome imutável é
+
+( E  F#m  A/C# )
+
+D                E
+  Como um trovão
+
+Impetuoso
+   F#m
+Poderoso és
+     A/C#
+Grandioso és
+D                 E
+  Que venha o céu
+
+Nós proclamamos
+   F#m
+Poderoso és
+     A/C#
+Grandioso
+
+D                E
+  Como um trovão
+
+Impetuoso
+   F#m
+Poderoso és
+     A/C#
+Grandioso és
+D                 E
+  Que venha o céu
+
+Nós proclamamos
+   F#m
+Poderoso és
+     A/C#
+Grandioso és
+
+F#m           D
+    Vitorioso és
+               A
+Na tempestade estás
+     E           F#m
+Teu nome infalível é
+                 D
+Os reinos vêm e vão
+                A/E
+Teu trono acima está
+     E
+Teu nome imutável
+
+D                E
+  Como um trovão
+
+Impetuoso
+    F#m
+(Poderoso és)
+    A/C#
+Grandioso és
+D                 E
+  Que venha o céu
+
+Nós proclamamos
+     F#m
+(Poderoso és)
+     A/C#
+(Grandioso és)
+
+[Solo] D  E  F#m  A/C#
+       D  E  F#m  E
+
+F#m           D
+    Vitorioso és
+                A
+Na tempestade estás
+     E            F#m
+Teu nome infalível é
+                 D
+Os reinos vêm e vão
+                   A
+Teu trono (acima está)
+     E          F#m
+Teu nome imutável é
+
+          D
+Vitorioso és
+                A
+Na tempestade estás
+     E           F#m
+Teu nome infalível é
+                 D
+Os reinos vêm e vão
+                  A
+Teu trono acima está
+     E            D
+Teu nome imutável é`;
+
+    const cifraH8 = `Tom: G
+[Intro] C9  G  C9  G
+
+[Primeira Parte]
+
+             C9
+Tu me dás a paz que excede todo entendimento humano
+             G
+E quando planejo me mostras que é bem melhor o Teu plano
+           C9                              Am
+Com misericórdia me cobres derramando graça em mim
+                         G
+Eu desconheço um outro amor assim
+
+             C9
+E ao meu respeito eu sei que só tens pensamentos de paz
+              G
+Por Teu sacrifício hoje eu posso andar sem olhar para trás
+             C9                              Am
+Eu não compreendo tamanha bondade que está sobre mim
+                         G
+Eu desconheço um outro amor assim
+
+[Refrão]
+
+           C9
+Que amor é esse?
+
+Graça incalculável
+             G
+Não tem interesse, não quer nada em troca
+
+Tua vontade é boa, perfeita e agradável
+      C9 Am      G
+Para mim, para mim
+            C9
+Quero conhecer-Te, ouvir Teus segredos
+                G
+Não importa o preço, eu me lanço inteiro
+
+Sei que nos Teus braços existe um espaço
+      C9 Am
+Para mim
+      G
+Para mim
+
+( C9  G )
+
+[Primeira Parte]
+
+             C9
+Tu me dás a paz que excede todo entendimento humano
+             G
+E quando planejo me mostras que é bem melhor o Teu plano
+           C9                             Am
+Com misericórdia me cobres derramando graça em mim
+                         G
+Eu desconheço um outro amor assim
+
+             C9
+E ao meu respeito eu sei que só tens pensamentos de paz
+              G
+Por Teu sacrifício hoje eu posso andar sem olhar para trás
+             C9                                   Am7
+Eu não compreendo tamanha bondade que está sobre mim
+          C9             G
+Eu desconheço um outro amor assim
+
+[Refrão]
+
+           C9
+Que amor é esse?
+
+Graça incalculável
+             G
+Não tem interesse, não quer nada em troca
+
+Tua vontade é boa, perfeita e agradável
+      C9        G
+Para mim, para mim
+            C9
+Quero conhecer-Te, ouvir Teus segredos
+                G
+Não importa o preço, eu me lanço inteiro
+
+Sei que nos Teus braços existe um espaço
+      C9 Am
+Para mim
+      G
+Para mim
+
+[Segunda Parte]
+
+   C9
+E nada vai ocupar Teu lugar em mim
+   G
+E ninguém pode ocupar meu lugar em Ti
+   C9
+E nada vai ocupar Teu lugar em mim
+                         G
+Eu desconheço um outro amor assim
+
+   C9
+E nada vai ocupar Teu lugar em mim
+   Em7                              G
+E ninguém pode ocupar meu lugar em Ti
+   C9                            Am
+E nada vai ocupar Teu lugar em mim
+                         G
+Eu desconheço um outro amor assim
+
+[Refrão]
+
+           C9
+Que amor é esse?
+
+Graça incalculável
+             G
+Não tem interesse, não quer nada em troca
+
+Tua vontade é boa, perfeita e agradável
+      C9        G   Bm
+Para mim, para mim
+            Am7                        C9
+Quero conhecer-Te mais, ouvir Teus segredos
+                Em7
+Não importa o preço, Eu me lanço inteiro
+                   G
+Sei que nos Teus braços existe um espaço
+      C9
+Para mim
+      G
+Para mim`;
+
+    const cifraH10 = `Tom: G
+[Intro] Am  G/B  C
+        Am  G/B  D
+
+[Primeira Parte]
+
+              C      G/B
+Graças eu te dou pai
+             C  D G
+Pelo preço que pagou
+            D/E Em
+Sacrifício de amor
+     D      C     Am   G/B   D4
+Que me comprou ungido do Senhor
+
+[Segunda Parte]
+
+             C        G/B
+Pelos cravos em suas mãos
+              C  D         G
+Graças eu te dou ó meu Senhor
+                     D/E Em
+Lavou minha mente e coração
+    D      C
+Me deu perdão
+       Am       G/B  D4
+Restaurou-me a comunhão
+
+[Refrão]
+
+ G            D/F#
+Digno é o Senhor
+ Am       G/B    C
+Sobre o trono está
+ D   D/C    G/B  C
+Soberano, cria__dor
+     Am       G   D
+Vou sempre te adorar
+  G           D/F#
+Elevo minhas mãos
+     Am     G/B   C
+Ao Cristo que venceu
+    D        D/C
+Cordeiro de Deus
+    G/B     C  D4
+Morreu por mim
+           Am   G/B  C
+Mas ressuscitou
+           Am    G/B  D
+Digno é o Senhor
+
+[Segunda Parte]
+
+             C        G/B
+Pelos cravos em suas mãos
+              C  D         G
+Graças eu te dou ó meu Senhor
+                     D/E Em
+Lavou minha mente e coração
+    D      C
+Me deu perdão
+       Am       G/B  D4
+Restaurou-me a comunhão
+
+[Refrão Final]
+
+ G            D/F#
+Digno é o Senhor
+ Am       G/B    C
+Sobre o trono está
+ D   D/C    G/B  C
+Soberano, cria__dor
+     Am       G   D
+Vou sempre te adorar
+  G           D/F#
+Elevo minhas mãos
+     Am     G/B   C
+Ao Cristo que venceu
+    D        D/C
+Cordeiro de Deus
+    G/B     C  D4
+Morreu por mim
+           Am   G/B  C
+Mas ressuscitou
+           Am    G/B  D
+Digno é o Senhor
+
+  G           D/F#
+Elevo minhas mãos
+     Am     G/B   C
+Ao Cristo que venceu
+    D        D/C
+Cordeiro de Deus
+    G/B     C  D4
+Morreu por mim
+           Am   G/B  C
+Mas ressuscitou
+           Am    G/B  D
+Digno é o Senhor
+
+           Am   G/B  C
+Mas ressuscitou
+           Am    G/B  D4
+Digno é o Senhor
+           Am   G/B  C
+Mas ressuscitou
+           Am    G/B  D4
+Digno é o Senhor
+           Am   G/B  C
+Mas ressuscitou
+           Am    G/B  D4
+Digno é o Senhor`;
+
+    const cifraH11 = `Tom: A
+[Intro] D  A  F#m B7  E
+
+[Primeira Parte]
+
+    A
+O amigo que eu encontrei
+    C#m7
+Me surpreendeu
+        Em7         A7
+Quando todos me deixaram
+       D
+Ele me acolheu
+     Dm
+E sarou minhas feridas
+       A           F#m
+Das algemas me livrou
+       B7
+Lhe falei do meu dilema
+         Bm7  E7
+E Ele me escutou
+
+       A
+Lhe falei do meu passado
+   C#m7
+E me perdoou
+      Em7           A7
+Isso teve um alto preço
+            D    D9
+Que Ele já pagou
+        Dm
+Me mostrou as mãos feridas
+    A               F#m
+Por amor de muitas vidas
+       Bm            E7       A  C#7
+E uma dessas muitas vidas era eu
+
+[Refrão]
+
+            F#m
+Quem nesse mundo
+           C#7        F#m F#m7
+Amor tão grande pode ter
+         Bm            F#7        Bm  Bm7
+De entregar a própria vida sem temer?
+            D
+Quem já sentiu a dor
+    Dm            A     F#m
+De ser cravado em uma cruz
+         B7                      Bm7  E7
+Pagando pelos erros que não cometeu?
+
+            A
+E olhar nos olhos
+                    C#7
+De quem tanto mal lhe fez
+   Em7         A7         D
+E sem ressentimento oferecer perdão
+           Dm
+Quem pode ser
+                       A  F#m7
+Melhor amigo que o Senhor
+          Bm
+Que pelo servo
+           E7         Em7  A7
+A própria vida renunciou?
+           D
+Quem pode ser
+         Dm             A  F#m
+Melhor amigo que o Senhor
+          Bm
+Que pelo servo
+           E7         D   Dm
+A própria vida renunciou?
+    A
+Meu amigo`;
+
+    const cifraH12 = `Tom: Em
+[Intro] Em7  C  Am  B7
+
+[Primeira Parte]
+
+  Em7                     Am7
+Quando em cativeiro te levaram de Sião
+D7(9)                     G
+E os teus sacerdotes prantearam de aflição
+ C9             Am6
+Foi como morrer de vergonha e dor
+ F#7(4)                   B7(4)       B7
+Caminhava triste o povo forte do Senhor
+
+[Segunda Parte]
+
+Em7                      Am7
+Ah, Jerusalém porque deixaste de adorar
+D7(9)                       G
+O Deus Vivo que em tantas batalhas te ajudou
+  C9         Am6
+Chora Israel num lamento só
+ F#7(4)                       B7(4)       B7
+Talvez Deus se lembre do "bichinho de" Jacó
+
+[Refrão]
+
+  Em7     Am7  D7(9)                G
+Chora Israel,  Babilônia não é teu lugar
+  C9
+Clama ao teu Deus
+  Am6
+E Ele te ouvirá
+ F#7(4)               B7(4)  B7
+Do inimigo te libertará
+
+  Em7     Am7  D7(9)                G
+Chora Israel,  Babilônia não é teu lugar
+  C9                Am6
+Clama ao teu Deus, e Ele te ouvirá
+ B7(4)      B7        C9  D9
+Do inimigo te libertará
+
+[Solo] Em  Am7  D7  G
+       C  Am7  F#7(4) B7(4)  B7
+
+[Segunda Parte]
+
+Em7                      Am7
+Ah, Jerusalém porque deixaste de adorar
+D7(9)                       G
+O Deus Vivo que em tantas batalhas te ajudou
+  C9         Am6
+Chora Israel num lamento só
+ F#7(4)                       B7(4)       B7
+Talvez Deus se lembre do "bichinho de" Jacó
+
+[Refrão]
+
+  Em7     Am7  D7(9)                G
+Chora Israel,  Babilônia não é teu lugar
+  C9
+Clama ao teu Deus
+  Am6
+E Ele te ouvirá
+ F#7(4)               B7(4)  B7
+Do inimigo te libertará
+
+  Em7     Am7  D7(9)                G
+Chora Israel,  Babilônia não é teu lugar
+  C9                Am6
+Clama ao teu Deus, e Ele te ouvirá
+ B7(4)      B7        C9  D9  Em
+Do inimigo te libertará`;
+
+    const cifraH13 = `Tom: C
+[Intro] C  F2
+
+[Primeira Parte]
+
+C
+  No início eras a palavra
+        F2        Am7   G  G4  G
+Um com Deus, o altíssimo
+Am7             G/B     C
+    O mistério de Tua glória
+            F2    Am7  G
+Cristo, em Ti se reve_lou
+
+[Refrão]
+
+                         C
+Oh, quão lindo esse nome é
+                         G
+Oh, quão lindo esse nome é
+        Am7  G        F2
+O nome de Jesus, meu Rei
+
+                         C/E
+Oh, quão lindo esse nome é
+                   G
+Maior que tudo ele é
+                         Am7
+Oh, quão lindo esse nome é
+     G     F2
+O nome de Jesus
+
+[Segunda Parte]
+
+F/C  C
+       Deixou o céu para buscar-nos
+       F      Am7  G
+Veio pra nos resgatar
+Am7                   G/B   C
+    Amor maior que o meu pecado
+      F       Am7  G
+Nada vai nos sepa_rar
+
+[Refrão]
+
+                     C
+Oh, quão maravilhoso é
+                     G
+Oh, quão maravilhoso é
+        Am7  G        F/C
+O nome de Jesus, meu rei
+
+                     C/E
+Oh, quão maravilhoso é
+                   G
+Maior que tudo ele é
+                     Am7
+Oh, quão maravilhoso é
+
+   G    F/C
+O nome de Jesus
+Am7           G          F/C
+    Oh, quão maravilhoso é
+        F
+O nome de Jesus
+
+[Ponte]
+
+( G6  Am7  C/E )
+( F  G6  Am7  C/E )
+( F  G6  Am7  C/E )
+( F  G6  Am7  C/E )
+
+            F7M/C
+A morte venceste
+             G
+O véu Tu rompeste
+           Am7         C/E
+A tumba vazia agora está
+
+           F7M/C
+O céu Te adora
+               G
+Proclama Tua glória
+              Am7            C/E
+Pois ressuscitaste e vivo está
+
+         F7M/C        G
+És invencível, inigualável
+            Am7         C/E
+Hoje e pra sempre reinarás
+
+         F7M/C          G
+Teu é o reino Tua é a glória
+          Am7         G
+Acima de todo nome estás
+
+[Refrão]
+
+                   C
+Poderoso esse nome é
+                   G
+Poderoso esse nome é
+        Am7  G        F7M/C
+O nome de Jesus, meu rei
+
+                   C/E
+Poderoso esse nome é
+                    G
+Mais forte que tudo é
+                   Am7
+Poderoso esse nome é
+     G     F7M/C
+O nome de Jesus
+
+[Ponte]
+
+                      G
+És invencível, inigualável
+            Am7         C/E
+Hoje e pra sempre reinarás
+
+         F7M/C          G
+Teu é o reino Tua é a glória
+          Am7         C/E
+Acima de todo nome estás
+
+[Refrão]
+
+                   C
+Poderoso esse nome é
+                   G
+Poderoso esse nome é
+        Am7  G        F7M/C
+O nome de Jesus, meu rei
+
+                   C/E
+Poderoso esse nome é
+                    G
+Mais forte que tudo é
+                   Am7
+Poderoso esse nome é
+     G     F7M/C
+O nome de Jesus
+                   Am7
+Poderoso esse nome é
+     G     F7M/C
+O nome de Jesus
+                   Am7
+Poderoso esse nome é
+     G     F7M/C
+O nome de Jesus`;
+
+    const cifraH14 = `Tom: E
+[Intro] A  E/G# (4x)
+
+       A          E/G#
+Não há outro como Tu
+     A        E/G#
+Soberano e fiel
+       A          C#m7
+Não há outro como Tu
+      A               B4   B
+Reina sobre a terra e céus
+
+        E
+Tu és o Alfa e Ômega Início e fim
+     B
+És o ar que eu respiro Tudo pra mim
+  A          F#m7    B
+Tu és Jesus, Tu és Jesus
+
+( A  E/G#  A  E/G# )
+
+       A          E/G#
+Não há outro como Tu
+     A        E/G#
+Soberano e fiel
+       A          C#m7
+Não há outro como Tu
+      A               B4   B
+Reina sobre a terra e céus
+
+        E
+Tu és o Alfa e Ômega Início e fim
+     B
+És o ar que eu respiro Tudo pra mim
+E/G# A           F#m    B
+Tu   és Jesus, Tu és Jesus
+        C#m7
+Tu és o Alfa e Ômega Início e fim
+     B/D#               E
+És o ar que eu respiro Tudo pra mim
+    A           F#m7    B
+Tu és Jesus, Tu és Jesus
+
+[Solo] A  B  C#m7  F#m7  E  C#m7  B (2x) /  A
+
+E
+Alfa e Ômega início e fim
+F#m          A
+Tudo pra mim tudo pra mim (4x)
+
+        E
+Tu és o Alfa e Ômega Início e fim
+     B
+És o ar que eu respiro Tudo pra mim
+E/G#  A           F#m7    B4 B
+Tu    és Jesus, Tu és Jesus
+        C#m7
+Tu és o Alfa e Ômega Início e fim
+     B/D#              E
+És o ar que eu respiro Tudo pra mim
+    A           F#m7    B4 B
+Tu és Jesus, Tu és Jesus`;
+
+    function abrirCifra(titulo, texto) {
+        document.getElementById('modalTitulo').innerText = titulo;
+        document.getElementById('modalCifra').innerText = texto;
+        document.getElementById('cifraModal').style.display = "block";
+        document.body.style.overflow = "hidden";
+    }
+
+    function fecharCifra() {
+        document.getElementById('cifraModal').style.display = "none";
+        document.body.style.overflow = "auto";
+    }
+
+    function fecharSplash() {
+        const splash = document.getElementById('splash-screen');
+        splash.style.opacity = '0';
+        splash.style.transform = 'translateY(-20px)';
+        setTimeout(() => { splash.style.display = 'none'; }, 800);
+    }
+
+    window.onclick = function(e) { if(e.target == document.getElementById('cifraModal')) fecharCifra(); }
+
+    function updateTimer() {
+    const timerElement = document.getElementById('timer');
+    const now = new Date();
+    const targetDate = new Date();
+    const diaHoje = now.getDay();
+
+    // Alvo: 17:00:00
+    const diasParaDomingo = (diaHoje === 0 && now.getHours() >= 17) ? 7 : (diaHoje === 0 ? 0 : 7 - diaHoje);
+    targetDate.setDate(now.getDate() + diasParaDomingo);
+    targetDate.setHours(17, 0, 0, 0);
+
+    const diff = targetDate - now;
+
+    if (diff > 0) {
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        timerElement.innerHTML = `<span>⚠️ CHECK-OUT SOUND ÁS 17H:</span> ${h}h ${m}m ${s}s`;
+    } else {
+        timerElement.innerHTML = `🍷 CULTO EM ANDAMENTO`;
+        timerElement.classList.remove('alert');
+        timerElement.classList.add('highlight');
+    }
+}
+    setInterval(updateTimer, 1000); updateTimer();
+
+    function searchMusic() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let cards = document.getElementsByClassName('card');
+        for (let card of cards) {
+            card.style.display = card.innerText.toLowerCase().includes(input) ? "flex" : "none";
+        }
+    }
+
+    function toggleDone(card) {
+        card.classList.toggle('done');
+        const total = document.querySelectorAll('.card').length;
+        const done = document.querySelectorAll('.card.done').length;
+        document.getElementById('progress-bar').style.width = (done/total * 100) + "%";
+    }
+    function filtrarRepertorio() {
+    // Pega o que o usuário digitou e ignora maiúsculas/minúsculas
+    let input = document.getElementById('searchInput').value.toLowerCase();
+    let cards = document.getElementsByClassName('card');
+
+    for (let i = 0; i < cards.length; i++) {
+        // Pega o texto de dentro do card (Titulo, Cantor e Tonalidade)
+        let infoCard = cards[i].innerText.toLowerCase();
+
+        // Se a pesquisa estiver contida no texto do card, ele aparece, senão some
+        if (infoCard.includes(input)) {
+            cards[i].style.display = "";
+            // Efeito de entrada suave ao reaparecer
+            cards[i].style.animation = "slideUp 0.4s ease-out";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+
+</script>
+<footer style="text-align: center; padding: 60px 20px; margin-top: 50px; border-top: 1px solid rgba(168, 85, 247, 0.1); background: rgba(2, 6, 23, 0.4);">
+    <div style="max-width: 600px; margin: 0 auto;">
+
+        <div style="font-size: 0.75rem; font-weight: 800; color: #a855f7; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 15px;">
+            Nexus Tecnologia
+        </div>
+
+        <div style="width: 40px; height: 1px; background: rgba(168, 85, 247, 0.3); margin: 0 auto 20px;"></div>
+
+        <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.6; margin: 0;">
+            © 2026 Todos os Direitos Reservados.<br>
+            Desenvolvido por <strong style="color: #f1f5f9; font-weight: 800;">JOHN ÁLEX</strong>
+        </p>
+
+        <div style="margin-top: 25px;">
+            <a href="https://www.instagram.com/NEXUS.TECNOLOGIAERP" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 10px; color: #d8b4fe; font-size: 0.85rem; font-weight: 700; transition: 0.3s; padding: 10px 20px; border-radius: 50px; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.2);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+                <span>NEXUS.TECNOLOGIAERP</span>
+            </a>
+        </div>
+
+    </div>
+</footer>
+
+</body>
+</html>
