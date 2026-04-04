@@ -160,15 +160,11 @@
         }
 
         .cifra-wrapper {
-            flex: 1;
-            overflow-x: auto; /* ATIVA SCROLL LATERAL */
-            overflow-y: hidden; /* TRAVA SCROLL VERTICAL */
-            margin-top: 15px;
-            padding-bottom: 20px;
-            display: block;
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary) #f1f5f9;
-        }
+    flex: 1;
+    overflow-x: auto; /* Permite deslizar para o lado se a cifra for larga */
+    overflow-y: auto; /* Permite rolar para baixo no celular */
+    -webkit-overflow-scrolling: touch; /* Deixa o scroll suave no iPhone/Android */
+}
 
         .cifra-wrapper::-webkit-scrollbar { height: 8px; }
         .cifra-wrapper::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
@@ -191,20 +187,16 @@
             padding-bottom: 10px;
         }
 
-        .cifra-container {
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre;
-            font-size: 1.2rem;
-            color: #000000;
-            font-weight: 700;
-            line-height: 1.5;
-            column-width: 450px; /* LARGURA DA PÁGINA */
-            column-gap: 60px;
-            height: 80vh;
-            column-fill: auto;
-            display: block;
-        }
-
+.cifra-container {
+    font-family: 'Courier New', monospace;
+    white-space: pre;
+    font-size: 1.1rem; /* Diminuímos levemente para caber mais texto */
+    color: #000;
+    column-width: 90vw; /* No celular, a coluna ocupa quase a tela toda */
+    column-gap: 30px;
+    height: auto; /* Deixa o texto fluir para baixo se precisar */
+    padding-bottom: 50px;
+}
         .cifra-container strong {
             color: var(--primary);
             text-shadow: none;
@@ -226,11 +218,13 @@
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        @media (max-width: 800px) {
-            .cifra-container {
-                column-width: 100vw;
-                column-gap: 20px;
-            }
+        @media (min-width: 768px) {
+    .cifra-container {
+        column-width: 450px;
+        font-size: 1.2rem;
+        height: 80vh;
+    }
+}
             .modal-content { padding: 15px; }
             .repertorio-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
         }
