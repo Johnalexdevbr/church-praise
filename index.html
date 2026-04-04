@@ -149,21 +149,21 @@
         }
 
         .modal-content {
-            padding: 20px 40px;
-            height: 100vh;
-            width: 100vw;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            background-color: #ffffff;
-            overflow: hidden;
-        }
+    padding: 15px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #fff;
+}
 
         .cifra-wrapper {
     flex: 1;
-    overflow-x: auto; /* Permite deslizar para o lado se a cifra for larga */
-    overflow-y: auto; /* Permite rolar para baixo no celular */
-    -webkit-overflow-scrolling: touch; /* Deixa o scroll suave no iPhone/Android */
+    overflow-x: auto;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 5px; /* Pequeno recuo interno */
+    -webkit-overflow-scrolling: touch;
 }
 
         .cifra-wrapper::-webkit-scrollbar { height: 8px; }
@@ -190,12 +190,11 @@
 .cifra-container {
     font-family: 'Courier New', monospace;
     white-space: pre;
-    font-size: 1.1rem; /* Diminuímos levemente para caber mais texto */
+    font-size: 0.95rem; /* Diminuímos um pouco para a frase caber toda */
     color: #000;
-    column-width: 90vw; /* No celular, a coluna ocupa quase a tela toda */
-    column-gap: 30px;
-    height: auto; /* Deixa o texto fluir para baixo se precisar */
-    padding-bottom: 50px;
+    line-height: 1.5;
+    column-width: auto; /* Removemos as colunas no celular para evitar cortes */
+    column-gap: 0;
 }
         .cifra-container strong {
             color: var(--primary);
@@ -219,10 +218,11 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (min-width: 768px) {
+    .modal-content { padding: 20px 40px; }
     .cifra-container {
-        column-width: 450px;
         font-size: 1.2rem;
-        height: 80vh;
+        column-width: 450px;
+        column-gap: 50px;
     }
 }
             .modal-content { padding: 15px; }
