@@ -159,10 +159,9 @@
 
         .cifra-wrapper {
     flex: 1;
-    overflow-x: auto;
-    overflow-y: auto;
-    margin-top: 10px;
-    padding: 5px; /* Pequeno recuo interno */
+    overflow-y: auto; /* Rola para baixo */
+    overflow-x: hidden;
+    padding: 15px 5px;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -187,47 +186,94 @@
             padding-bottom: 10px;
         }
 
+/* --- CONFIGURAÇÃO BASE (MOBILE FIRST - CELULAR VERTICAL) --- */
+.modal-content {
+    padding: 15px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.cifra-wrapper {
+    flex: 1;
+    overflow-y: auto; /* Rola para baixo no celular */
+    overflow-x: hidden;
+    padding: 10px 5px;
+    -webkit-overflow-scrolling: touch;
+}
+
 .cifra-container {
     font-family: 'Courier New', monospace;
-    white-space: pre;
-    font-size: 0.95rem; /* Diminuímos um pouco para a frase caber toda */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 1.1rem;
     color: #000;
-    line-height: 1.5;
-    column-width: auto; /* Removemos as colunas no celular para evitar cortes */
-    column-gap: 0;
+    font-weight: 700; /* LETRA EM NEGRITO */
+    line-height: 1.6;
+    column-count: 1;
+    width: 100%;
+    display: block;
 }
-        .cifra-container strong {
-            color: var(--primary);
-            text-shadow: none;
-        }
 
-        .highlight-link {
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-        }
+/* ACORDES EM ROXO E EXTRA NEGRITO */
+.cifra-container strong {
+    color: var(--primary) !important;
+    font-weight: 900 !important;
+}
 
-        .highlight-link:hover {
-            background: rgba(168, 85, 247, 0.15);
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.2);
-            filter: brightness(1.2);
-        }
+/* --- CONFIGURAÇÃO PARA TABLET 10" (MODO PAISAGEM / HORIZONTAL) --- */
+@media (orientation: landscape) and (min-width: 800px) {
+    .modal-content {
+        padding: 20px 40px;
+    }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .cifra-wrapper {
+        overflow-x: auto; /* ATIVA O SCROLL PARA O LADO NO TABLET */
+        overflow-y: hidden;
+        padding: 20px;
+    }
 
-        @media (min-width: 768px) {
-    .modal-content { padding: 20px 40px; }
     .cifra-container {
-        font-size: 1.2rem;
+        white-space: pre;
+        font-size: 1.25rem;
+        height: 70vh; /* Altura limite para o texto pular para a próxima coluna */
         column-width: 450px;
-        column-gap: 50px;
+        column-gap: 60px;
+        column-fill: auto;
+        width: max-content; /* Faz o texto esticar para a direita infinitamente */
+        display: block;
     }
 }
-            .modal-content { padding: 15px; }
-            .repertorio-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        }
+
+/* --- ANIMAÇÕES E LINKS --- */
+.highlight-link {
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.highlight-link:hover {
+    background: rgba(168, 85, 247, 0.15);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(168, 85, 247, 0.2);
+    filter: brightness(1.2);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* AJUSTE PARA O GRID DO REPERTÓRIO NO CELULAR */
+@media (max-width: 600px) {
+    .repertorio-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+}
     </style>
 </head>
 <body>
@@ -284,7 +330,7 @@
 <header>
     <div class="header-container">
         <div class="brand-section">
-            <h1>Powered by Nexus Tecnologia</h1>
+            <h1>PRAISE CHURCH</h1>
         </div>
         <div class="info-grid">
             <a href="https://www.instagram.com/louvor_ibmtibiri" target="_blank" class="info-pill highlight-link">
