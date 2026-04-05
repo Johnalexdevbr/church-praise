@@ -77,7 +77,6 @@
 
         .btn-premium:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(168, 85, 247, 0.4); }
 
-        /* --- CONTEÚDO PRINCIPAL (REPERTÓRIO) --- */
         header {
             background: rgba(15, 23, 42, 0.4);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -186,7 +185,6 @@
             padding-bottom: 10px;
         }
 
-/* --- CONFIGURAÇÃO BASE (MOBILE FIRST - CELULAR VERTICAL) --- */
 .modal-content {
     padding: 15px;
     height: 100vh;
@@ -202,6 +200,17 @@
     overflow-x: hidden;
     padding: 10px 5px;
     -webkit-overflow-scrolling: touch;
+}
+
+.modalCifra {
+    height: 60vh; /* Define que a cifra ocupa 60% da altura da tela */
+    overflow-y: auto; /* Habilita a rolagem vertical */
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    line-height: 1.5;
+    font-size: 16px;
+    white-space: pre-wrap; /* Mantém as quebras de linha da cifra */
 }
 
 .cifra-container {
@@ -267,13 +276,158 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* AJUSTE PARA O GRID DO REPERTÓRIO NO CELULAR */
+.nexus-transposer-wrapper {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+}
+
+.transposer-flag {
+    background: var(--primary);
+    color: white;
+    font-size: 9px;
+    font-weight: 900;
+    padding: 12px 8px;
+    border-radius: 8px 0 0 8px;
+    letter-spacing: 1px;
+    writing-mode: vertical-lr; /* Texto em pé para economizar espaço */
+    transform: rotate(180deg);
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.nexus-tone-slim {
+    display: flex;
+    align-items: center;
+    background: #0f172a; /* Azul Navy profundo */
+    padding: 0 8px;
+    border-radius: 0 10px 10px 0;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-left: none; /* Encaixe perfeito com a flag */
+    height: 42px;
+}
+
+.btn-step {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.btn-step:hover {
+    color: #fff;
+    transform: scale(1.2);
+}
+
+.display-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+    min-width: 45px;
+    background: rgba(0,0,0,0.3);
+    height: 100%;
+}
+
+.label-mini {
+    font-size: 7px;
+    font-weight: 900;
+    color: #64748b;
+    letter-spacing: 1px;
+    margin-bottom: -1px;
+}
+
+#display-tom {
+    color: #fff;
+    font-weight: 900;
+    font-size: 15px;
+    text-shadow: 0 0 5px var(--primary);
+}
+
 @media (max-width: 600px) {
     .repertorio-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
     }
 }
+
+        .nexus-tone-slim {
+    display: flex;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.9);
+    padding: 4px 10px;
+    border-radius: 0 0 12px 12px; /* Encaixa na badge de cima */
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    height: 40px;
+}
+
+.btn-theme {
+    background: transparent;
+    border: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    margin-left: 8px;
+    padding-left: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60%;
+}
+
+.btn-theme:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 5px var(--primary));
+}
+
+.display-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 12px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+        .modal-content.dark-mode {
+    background-color: #020617 !important;
+}
+
+.modal-content.dark-mode #modalCifra {
+    color: #ffffff !important;
+}
+
+.modal-content.dark-mode #modalTitulo {
+    color: #ffffff !important;
+    border-bottom-color: rgba(255,255,255,0.1) !important;
+}
+
+        .transposer-badge {
+    background: var(--primary);
+    color: #ffffff !important;
+    font-size: 8px;
+    font-weight: 900;
+    padding: 3px 12px;
+    border-radius: 6px 6px 0 0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+
     </style>
 </head>
 <body>
@@ -355,7 +509,7 @@
 <div class="container">
     <div class="repertorio-grid" id="musicGrid">
         <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">01 | Periodo de louvor</span><span class="cantor-nome">MILENA DELMIRO</span><h2 class="musica-titulo">Único + Que Ele Cresça</h2><span class="tom-badge">TOM: B</span></div><div class="btn-mini" onclick="abrirCifra('Único + Que Ele Cresça', cifraH1); event.stopPropagation()">📄 Ver Cifra</div></div>
-        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">02 | Periodo de louvor</span><span class="cantor-nome">LAYS LIMA</span><h2 class="musica-titulo">Adorarei</h2><span class="tom-badge">TOM: C#m</span></div><div class="btn-mini" onclick="abrirCifra('Adorarei', cifraH2); event.stopPropagation()">📄 Ver Cifra</div></div>
+        <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">02 | Periodo de louvor</span><span class="cantor-nome">LAYS LIMA</span><h2 class="musica-titulo">Adorarei</h2><span class="tom-badge">TOM: A#M</span></div><div class="btn-mini" onclick="abrirCifra('Adorarei', cifraH2); event.stopPropagation()">📄 Ver Cifra</div></div>
         <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">03 | Periodo de louvor</span><span class="cantor-nome">MILENA CÁSSIA</span><h2 class="musica-titulo">Sei é Bem Assim</h2><span class="tom-badge">TOM: E</span></div><div class="btn-mini" onclick="abrirCifra('Sei é Bem Assim', cifraH3); event.stopPropagation()">📄 Ver Cifra</div></div>
         <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">04 | Periodo de louvor</span><span class="cantor-nome">TIAGO SOARES</span><h2 class="musica-titulo">Deus me Ama</h2><span class="tom-badge">TOM: A</span></div><div class="btn-mini" onclick="abrirCifra('Deus me Ama', cifraH4); event.stopPropagation()">📄 Ver Cifra</div></div>
         <div class="card" onclick="toggleDone(this)"><div><span class="musica-num">05 | Periodo de louvor</span><span class="cantor-nome">MILENA CÁSSIA</span><h2 class="musica-titulo">Bem Mais Que Tudo</h2><span class="tom-badge">TOM: E</span></div><div class="btn-mini" onclick="abrirCifra('Bem Mais Que Tudo', cifraH5); event.stopPropagation()">📄 Ver Cifra</div></div>
@@ -375,6 +529,24 @@
     <div class="modal-content">
         <span class="close-btn" onclick="fecharCifra()">&times;</span>
 
+        <div class="nexus-transposer-container">
+            <div class="transposer-badge">
+                TRANSPOR TOM
+            </div>
+
+            <div class="nexus-tone-slim">
+                <button class="btn-step" onclick="transporCifra(-1)">-</button>
+                <div class="display-box">
+                    <span class="label-mini">PITCH</span>
+                    <span id="display-tom">0</span>
+                </div>
+                <button class="btn-step" onclick="transporCifra(1)">+</button>
+
+                <button id="btn-tema" class="btn-theme" onclick="alternarTemaModal()">🌙</button>
+            </div>
+        </div>
+
+
         <div style="border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
             <h2 id="modalTitulo" style="color: #020617; margin: 0;"></h2>
         </div>
@@ -384,6 +556,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
     const cifraH1 = `Tom: B
@@ -550,178 +723,178 @@ Infinita humildade
             F#           C#m
 Servo de todos os irmãos`;
 
-    const cifraH2 = `Tom: C#m
-[Intro] E  A  E  B
-        C#m B  Cm7(5-)
+    const cifraH2 = `Tom: A#m
+[Intro] C# F# C# G#
+        A#m G# Am7(5-)
 
 [Primeira Parte]
 
-C#m                      A
+A#m                      F#
    Por tua morte lá na cruz
-               E
+               C#
 Jesus te adorarei
-                  B
+                  G#
 Pelo sangue derramado
-                     A
+                     F#
 Pelo véu que foi rasgado
-         E  B/D#
+         C# G#/C
 Te adorarei
 
-C#m                           A
+A#m                           F#
    Pelo privilégio de aqui estar
-                                  E
+                                  C#
 Poder soltar a minha voz e te louvar
-                     B
+                     G#
 Por sentir a tua presença
-                               A
+                               F#
 Pela total certeza de tua existência
-         E ( E  B/D# )
+         C#( C# G#/C )
 Te adorarei
 
-C#m                                      A
+A#m                                      F#
    Por teu santo espirito que habita em mim
-                                 E
+                                 C#
 Por teu grande amor que não tem fim
-     B      Cm7(5-)
+     G#     Am7(5-)
 Te adorarei
-C#m                               A
+A#m                               F#
    Por me inspirar na letra da canção
-                                E
+                                C#
 Por cantar agora e senti sua unção
-     B
+     G#
 Te adorarei
 
 [Refrão]
 
-            E
+            C#
 Te adorarei
-                             B
+                             G#
 Senhor mais uma vez te adorarei
-                                     F#m
+                                     D#m
 Fui chamada pra adorar então adorarei
 
 Sou adorador foi assim que
-         C#m             B
+         A#m             G#
 Deus me fez então adorarei
 
-  A/C#   E
+  F#/A#  C#
 Adorarei
-                             B
+                             G#
 Senhor mais uma vez te adorarei
-                                     F#m
+                                     D#m
 Fui chamada pra adorar então adorarei
 
 Sou adorador foi assim que
-         C#m             B
+         A#m             G#
 Deus me fez então adorarei
 
 [Ponte]
 
-C#m                              A
+A#m                              F#
    Ninguém vai me calar te adorarei
-                         E
+                         C#
 Está em meu DNA te adorarei
-                         B
+                         G#
 Ainda que tirarem minha vida
-                                 C#m
+                                 A#m
 Quando chegar ai no céu te adorarei
 
-                              A
+                              F#
 Ninguém vai me calar te adorarei
-                         E
+                         C#
 Está em meu DNA te adorarei
-                         B
+                         G#
 Ainda que tirarem minha vida
 
 Quando chegar ai no céu te adorarei
 
-C#m            A
+A#m            F#
    Te adorarei   te adorarei
-E                      B
+C#                     G#
   Quando chegar ai no céu te adorarei
-C#m            A
+A#m            F#
    Te adorarei   te adorarei
-E                      B
+C#                     G#
   Quando chegar ai no céu te adorarei
 
-( C#m A  E  B )
-( C#m A  E  B )
+( A#m F# C# G# )
+( A#m F# C# G# )
 
 [Primeira Parte]
 
-C#m                                      A
+A#m                                      F#
    Por teu santo espirito que habita em mim
-                                  E
+                                  C#
 Pelo teu grande amor que não tem fim
-     B
+     G#
 Te adorarei
-C#m                               A
+A#m                               F#
    Por me inspirar na letra da canção
-                               E
+                               C#
 Por tocar agora e senti sua unção
-     B
+     G#
 Te adorarei
 
 [Refrão]
 
-            E
+            C#
 Te adorarei
-                             B
+                             G#
 Senhor mais uma vez te adorarei
-                                     F#m
+                                     D#m
 Fui chamada pra adorar então adorarei
 
 Sou adorador foi assim que
-         C#m             B
+         A#m             G#
 Deus me fez então adorarei
 
-  A/C#   E
+  F#/A#  C#
 Adorarei
-                             B
+                             G#
 Senhor mais uma vez te adorarei
-                                     F#m
+                                     D#m
 Fui chamada pra adorar então adorarei
 
 Sou adorador foi assim que
-         C#m             B
+         A#m             G#
 Deus me fez então adorarei
 
 [Ponte]
 
-C#m                              A
+A#m                              F#
    Ninguém vai me calar te adorarei
-                         E
+                         C#
 Está em meu DNA te adorarei
-                         B
+                         G#
 Ainda que tirarem minha vida
-                                 C#m
+                                 A#m
 Quando chegar ai no céu te adorarei
 
-                              A
+                              F#
 Ninguém vai me calar te adorarei
-                         E
+                         C#
 Está em meu DNA te adorarei
-                         B
+                         G#
 Ainda que tirarem minha vida
-                                  C#m
+                                  A#m
 Quando chegar ai no céu te adorarei
 
-C#m            A
+A#m            F#
    Te adorarei   te adorarei
-E                      B
+C#                     G#
   Quando chegar ai no céu te adorarei
-C#m            A
+A#m            F#
    Te adorarei   te adorarei
-E                      B
+C#                     G#
   Quando chegar ai no céu te adorarei
 
-C#m            A
+A#m            F#
    Te adorarei   te adorarei
-E                      B
+C#                     G#
   Quando chegar ai no céu te adorarei
-C#m            A
+A#m            F#
    Te adorarei   te adorarei
-E                      B           C#m
+C#                     G#          A#m
   Quando chegar ai no céu te adorarei`;
 
     const cifraH3 = `Tom: E
@@ -1854,34 +2027,132 @@ Tu és o Alfa e Ômega Início e fim
     A           F#m7    B4 B
 Tu és Jesus, Tu és Jesus`;
 
-    function abrirCifra(titulo, texto) {
-        document.getElementById('modalTitulo').innerText = titulo;
-        document.getElementById('modalCifra').innerText = texto;
-        document.getElementById('cifraModal').style.display = "block";
-        document.body.style.overflow = "hidden";
-    }
+let isScrolling = false;
+let animationFrame;
+const btnPlay = document.getElementById('btn-play-scroll');
+const speedInput = document.getElementById('scroll-speed');
 
-    function fecharCifra() {
-        document.getElementById('cifraModal').style.display = "none";
-        document.body.style.overflow = "auto";
-    }
+function abrirCifra(titulo, texto) {
+    document.getElementById('modalTitulo').innerText = titulo;
+    document.getElementById('modalCifra').innerText = texto;
+    document.getElementById('cifraModal').style.display = "block";
+    document.body.style.overflow = "hidden";
 
-    function fecharSplash() {
-        const splash = document.getElementById('splash-screen');
+    const containerCifra = document.getElementById('modalCifra');
+    if (containerCifra) {
+        containerCifra.scrollTop = 0;
+    }
+    stopScroll(); // Garante que comece pausado ao abrir
+}
+
+function doScroll() {
+    if (!isScrolling) return;
+
+    const containerCifra = document.getElementById('modalCifra');
+    if (!containerCifra) return;
+
+    const speed = parseFloat(speedInput.value) / 15;
+
+    containerCifra.scrollTop += speed;
+
+    const maxScroll = containerCifra.scrollHeight - containerCifra.clientHeight;
+
+    // Se chegar no fim ou se o modal fechar, para o scroll
+    if (containerCifra.scrollTop >= maxScroll || document.getElementById('cifraModal').style.display === "none") {
+        stopScroll();
+    } else {
+        animationFrame = requestAnimationFrame(doScroll);
+    }
+}
+
+function stopScroll() {
+    isScrolling = false;
+    cancelAnimationFrame(animationFrame);
+    const btn = document.getElementById('btn-play-scroll');
+    if(btn) {
+        btn.innerText = "▶ Iniciar";
+        btn.style.background = "#27ae60"; // Cor verde ao parar
+    }
+}
+
+function startScroll() {
+    isScrolling = true;
+    const btn = document.getElementById('btn-play-scroll');
+    if(btn) {
+        btn.innerText = "⏸ Pausar";
+        btn.style.background = "#e74c3c"; // Cor vermelha ao rodar
+    }
+    doScroll();
+}
+
+if(btnPlay) {
+    btnPlay.addEventListener('click', () => {
+        isScrolling ? stopScroll() : startScroll();
+    });
+}
+
+
+function fecharCifra() {
+    stopScroll(); // PARA O SCROLL AUTOMATICAMENTE AO FECHAR
+    document.getElementById('cifraModal').style.display = "none";
+    document.body.style.overflow = "auto";
+}
+
+function fecharSplash() {
+    const splash = document.getElementById('splash-screen');
+    if(splash) {
         splash.style.opacity = '0';
         splash.style.transform = 'translateY(-20px)';
         setTimeout(() => { splash.style.display = 'none'; }, 800);
     }
+}
 
-    window.onclick = function(e) { if(e.target == document.getElementById('cifraModal')) fecharCifra(); }
+window.onclick = function(e) {
+    if(e.target == document.getElementById('cifraModal')) fecharCifra();
+}
 
-    function updateTimer() {
+
+function searchMusic() {
+    let input = document.getElementById('searchInput').value.toLowerCase();
+    let cards = document.getElementsByClassName('card');
+    for (let card of cards) {
+        card.style.display = card.innerText.toLowerCase().includes(input) ? "flex" : "none";
+    }
+}
+
+function toggleDone(card) {
+    card.classList.toggle('done');
+    const total = document.querySelectorAll('.card').length;
+    const done = document.querySelectorAll('.card.done').length;
+    const progressBar = document.getElementById('progress-bar');
+    if(progressBar) progressBar.style.width = (done/total * 100) + "%";
+}
+
+function filtrarRepertorio() {
+    let input = document.getElementById('searchInput').value.toLowerCase();
+    let cards = document.getElementsByClassName('card');
+
+    for (let i = 0; i < cards.length; i++) {
+        let infoCard = cards[i].innerText.toLowerCase();
+
+        if (infoCard.includes(input)) {
+            cards[i].style.display = "";
+            cards[i].style.animation = "slideUp 0.4s ease-out";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+
+
+function updateTimer() {
     const timerElement = document.getElementById('timer');
+    if(!timerElement) return;
+
     const now = new Date();
     const targetDate = new Date();
     const diaHoje = now.getDay();
 
-    // Alvo: 17:00:00
     const diasParaDomingo = (diaHoje === 0 && now.getHours() >= 17) ? 7 : (diaHoje === 0 ? 0 : 7 - diaHoje);
     targetDate.setDate(now.getDate() + diasParaDomingo);
     targetDate.setHours(17, 0, 0, 0);
@@ -1899,41 +2170,58 @@ Tu és Jesus, Tu és Jesus`;
         timerElement.classList.add('highlight');
     }
 }
-    setInterval(updateTimer, 1000); updateTimer();
+setInterval(updateTimer, 1000);
+updateTimer();
 
-    function searchMusic() {
-        let input = document.getElementById('searchInput').value.toLowerCase();
-        let cards = document.getElementsByClassName('card');
-        for (let card of cards) {
-            card.style.display = card.innerText.toLowerCase().includes(input) ? "flex" : "none";
+    let tomAtualOffset = 0;
+let textoCifraOriginal = "";
+
+const abrirCifraOriginal = abrirCifra;
+abrirCifra = function(titulo, texto) {
+    textoCifraOriginal = texto; // Salva o original
+    tomAtualOffset = 0; // Reseta o offset
+    document.getElementById('display-tom').innerText = "ORIG";
+    abrirCifraOriginal(titulo, texto);
+};
+
+function transporCifra(semitons) {
+    const notas = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    tomAtualOffset += semitons;
+
+    document.getElementById('display-tom').innerText = (tomAtualOffset > 0 ? "+" : "") + tomAtualOffset;
+
+    const novoTexto = textoCifraOriginal.replace(/[A-G][#b]?/g, function(nota) {
+        // Converte bemol para sustenido para facilitar a conta
+        if (nota.endsWith('b')) {
+            const equivalentes = {"Db":"C#", "Eb":"D#", "Gb":"F#", "Ab":"G#", "Bb":"A#"};
+            nota = equivalentes[nota] || nota;
         }
-    }
 
-    function toggleDone(card) {
-        card.classList.toggle('done');
-        const total = document.querySelectorAll('.card').length;
-        const done = document.querySelectorAll('.card.done').length;
-        document.getElementById('progress-bar').style.width = (done/total * 100) + "%";
-    }
-    function filtrarRepertorio() {
-    // Pega o que o usuário digitou e ignora maiúsculas/minúsculas
-    let input = document.getElementById('searchInput').value.toLowerCase();
-    let cards = document.getElementsByClassName('card');
+        let index = notas.indexOf(nota);
+        if (index === -1) return nota; // Se não for nota, não mexe
 
-    for (let i = 0; i < cards.length; i++) {
-        // Pega o texto de dentro do card (Titulo, Cantor e Tonalidade)
-        let infoCard = cards[i].innerText.toLowerCase();
+        let novoIndex = (index + tomAtualOffset) % 12;
+        if (novoIndex < 0) novoIndex += 12;
 
-        // Se a pesquisa estiver contida no texto do card, ele aparece, senão some
-        if (infoCard.includes(input)) {
-            cards[i].style.display = "";
-            // Efeito de entrada suave ao reaparecer
-            cards[i].style.animation = "slideUp 0.4s ease-out";
-        } else {
-            cards[i].style.display = "none";
-        }
+        return notas[novoIndex];
+    });
+
+    document.getElementById('modalCifra').innerText = novoTexto;
+}
+
+    function alternarTemaModal() {
+    const modalContent = document.querySelector('.modal-content');
+    const btn = document.getElementById('btn-tema');
+
+    modalContent.classList.toggle('dark-mode');
+
+    if (modalContent.classList.contains('dark-mode')) {
+        btn.innerText = "☀️"; // Se está escuro, mostra o sol para voltar
+    } else {
+        btn.innerText = "🌙"; // Se está claro, mostra a lua para escurecer
     }
 }
+
 
 </script>
 <footer style="text-align: center; padding: 60px 20px; margin-top: 50px; border-top: 1px solid rgba(168, 85, 247, 0.1); background: rgba(2, 6, 23, 0.4);">
